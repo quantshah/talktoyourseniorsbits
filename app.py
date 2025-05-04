@@ -19,15 +19,19 @@ def index():
     try:
         df = pd.read_csv(GOOGLE_SHEET_CSV)
         testimonials = []
+        testimonials = [
+            {
+                "story": str(row.get("Your story", "")).strip(),
+                "bits_id": str(
+                    row.get("Batch, branch, year (BITS ID says it all)", "")
+                ).strip(),
+            }
+            for _, row in df.iterrows()
+            if str(row.get("Your story", "")).strip().lower() != "nan"
+        ]
 
+        random.shuffle(testimonials)  # Shuffle in-place
         # Randomly select a testimonial to show on the index page
-        for _, row in df.iterrows():
-            story = str(row.get("Your story", "")).strip()
-            bits_id = str(
-                row.get("Batch, branch, year (BITS ID says it all)", "")
-            ).strip()
-            if story and story.lower() != "nan":
-                testimonials.append({"story": story, "bits_id": bits_id})
     except Exception as e:
         testimonials = [
             {"story": "Unable to load stories at the moment.", "bits_id": ""}
@@ -46,19 +50,35 @@ def all_stories():
     """Render the all stories page with all testimonials."""
     try:
         df = pd.read_csv(GOOGLE_SHEET_CSV)
-        testimonials = []
 
-        for _, row in df.iterrows():
-            story = str(row.get("Your story", "")).strip()
-            bits_id = str(
-                row.get("Batch, branch, year (BITS ID says it all)", "")
-            ).strip()
-            if story:
-                testimonials.append({"story": story, "bits_id": bits_id})
+        # Remove rows without a valid story
+        df = df[df["Your story"].notna() & (df["Your story"].str.strip() != "")]
+
+        # Convert Timestamp column to datetime
+        df["Timestamp"] = pd.to_datetime(df["Timestamp"], errors="coerce")
+
+        # Drop rows with invalid timestamps
+        df = df.dropna(subset=["Timestamp"])
+
+        # Sort by timestamp descending (latest first)
+        df = df.sort_values(by="Timestamp", ascending=False)
+
+        # Build list of testimonial dicts
+        testimonials = [
+            {
+                "story": row["Your story"].strip(),
+                "bits_id": str(
+                    row.get("Batch, branch, year (BITS ID says it all)", "")
+                ).strip(),
+            }
+            for _, row in df.iterrows()
+        ]
     except Exception as e:
+        print("Error loading all stories:", e)
         testimonials = [
             {"story": "Unable to load stories at the moment.", "bits_id": ""}
         ]
+
     return render_template("all.html", testimonials=testimonials)
 
 

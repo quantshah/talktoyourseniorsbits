@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>All Stories</title>
+    <style>
+        body {
+            background-color: #111;
+            color: white;
+            font-family: sans-serif;
+            padding: 40px;
+        }
+
+        .story-box {
+            background-color: #222;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
+        }
+
+        .bits-id {
+            font-size: 0.9em;
+            color: #aaa;
+            margin-top: 10px;
+        }
+
+        a {
+            color: #6cf;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>All Testimonials</h1>
+    <a href="/">← Back to Home</a>
+    {% for item in testimonials %}
+    <div class="story-box">
+        <p>{{ item.story }}</p>
+        <div class="bits-id">– {{ item.bits_id }}</div>
+    </div>
+    {% endfor %}
+</body>
+
+</html>

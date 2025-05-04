@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Ready to Connect</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #111;
+            color: white;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .senior-box {
+            margin: 20px auto;
+            padding: 15px;
+            background-color: #222;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            text-align: left;
+        }
+
+        .senior-box p {
+            margin: 5px 0;
+        }
+
+        a.button {
+            margin-top: 30px;
+            padding: 12px 24px;
+            background: white;
+            color: #111;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        a.senior-link {
+            color: #89CFF0;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>You're ready to connect!</h2>
+
+    <div class="senior-box">
+        <p><strong>Your Email:</strong> {{ user_email }}</p>
+        <p><strong>Your Message:</strong></p>
+        <p style="white-space: pre-line;">{{ message }}</p>
+    </div>
+
+    <p>Your can connect with the following seniors:</p>
+
+    {% for senior in selected %}
+    <div class="senior-box">
+        <p><strong>Name:</strong> {{ senior["Name"] }}</p>
+        <p><strong>BITS ID:</strong> {{ senior["Batch, branch, year (BITS ID says it all)"] }}</p>
+        <p><strong>Email:</strong> {{ senior["Email"] }}</p>
+        {% if senior["LinkedIn Profile Link"] %}
+        <p><strong>LinkedIn:</strong> <a class="senior-link" href="{{ senior['LinkedIn Profile Link'] }}"
+                target="_blank">View Profile</a></p>
+        {% endif %}
+        <p><strong>Other information:</strong> {{ senior["Phone number or other ways to connect if not email (e.g.., to
+            call up on
+            WhatsApp, DM on LinkedIN etc)"] }}</p>
+    </div>
+    {% endfor %}
+
+    <a class="button" href="{{ email_link }}">Send Email</a>
+</body>
+
+
+</html>

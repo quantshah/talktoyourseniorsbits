@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>BITS Mental Health</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            background: url("/static/images/background.png") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+
+            padding: 40px 20px;
+            text-align: center;
+            gap: 20px;
+            /* Adds spacing between elements */
+        }
+
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2em;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        .buttons a {
+            margin: 0 10px;
+            padding: 10px 20px;
+            background: #fff;
+            color: #111;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .buttons a:hover {
+            background: #eee;
+        }
+
+        .testimonial-box {
+            margin-top: 20px;
+            background-color: #222;
+            border-radius: 10px;
+            padding: 0;
+            width: 80%;
+            max-width: 600px;
+            height: 250px;
+            /* fixed height */
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        /* Inner content scrolls */
+        .testimonial-content {
+            padding: 20px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        /* Optional fade effect */
+        .testimonial-box::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(to bottom, transparent, #222);
+            pointer-events: none;
+        }
+
+        /* Optional scrollbar styling */
+        .testimonial-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .testimonial-content::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 3px;
+        }
+
+
+        .see-all {
+            margin-top: 20px;
+        }
+
+        .see-all a {
+            padding: 10px 20px;
+            background: #444;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .see-all a:hover {
+            background: #666;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            color: #ccc;
+            font-size: 0.9em;
+        }
+
+        .footer a {
+            color: #ccc;
+            text-decoration: underline;
+        }
+
+        .footer a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="overlay">
+        <h1>You are not alone.</h1>
+        <p>At BITS, many of us have struggled. Seniors helped us through. This space is here for you too.</p>
+
+        <div class="buttons">
+            {% if talk_form_link %}
+            <a href="{{ talk_form_link }}">Talk to a Senior</a>
+            {% endif %}
+            <a href="{{ sign_up_link }}" target="_blank">Sign Up to Help</a>
+        </div>
+
+        <div class="testimonial-box">
+            <div class="testimonial-content" id="testimonialBox">
+                <p id="story">Loading...</p>
+                <small id="author"></small>
+            </div>
+        </div>
+
+        <div class="see-all">
+            <a href="/all">See All Stories</a>
+        </div>
+    </div>
+
+    <script>
+        const testimonials = {{ testimonials | tojson }};
+        let index = 0;
+
+        const storyBox = document.getElementById("story");
+        const authorBox = document.getElementById("author");
+
+        function showNext() {
+            if (testimonials.length === 0) return;
+            const t = testimonials[index];
+            storyBox.textContent = t.story || t["Your story"] || "";
+            authorBox.textContent = t.bits_id ? "- " + t.bits_id : "";
+            index = (index + 1) % testimonials.length;
+        }
+
+        setInterval(showNext, 5000);
+        showNext();
+    </script>
+    <footer class="footer">
+        Vibecoded with ❤️ by
+        <a href="https://www.linkedin.com/in/shahnawazahmed/" target="_blank">Shahnawaz Ahmed</a>
+        (<a href="https://github.com/shahnawazahmed" target="_blank">GitHub</a>).
+        <br>
+        Checkout the <a href="https://github.com/shahnawazahmed/your-repo-name" target="_blank">GitHub repository</a> to
+        contribute.
+    </footer>
+
+</body>
+
+</html>

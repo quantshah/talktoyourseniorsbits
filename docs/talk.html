@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Talk to a Senior - BITS Mental Health</title>
+    <style>
+        body { 
+            margin: 0;
+            font-family: sans-serif;
+            background: url("static/images/background.png") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        h1 { text-align: center; color: #ffffff; margin-bottom: 20px; }
+        
+        .contact-container {
+            background-color: rgba(30, 30, 30, 0.8);
+            border: 1px solid #333;
+            border-radius: 8px; 
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        
+        h2 { 
+            font-size: 1.3em; 
+            color: #bb86fc; 
+            margin-top: 0; 
+            margin-bottom: 20px; 
+            text-align: center;
+        }
+        
+        p { margin: 0 0 10px 0; line-height: 1.5; }
+        
+        .senior-card {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        
+        .senior-card:last-child {
+            margin-bottom: 0;
+        }
+        
+        .senior-email {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            word-break: break-all;
+        }
+        
+        .senior-linkedin {
+            display: inline-block;
+            margin-top: 5px;
+            color: #bb86fc;
+            text-decoration: none;
+        }
+        
+        .senior-linkedin:hover {
+            text-decoration: underline;
+        }
+        
+        .refresh-btn {
+            padding: 10px 20px;
+            background-color: #bb86fc;
+            color: #121212;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .refresh-btn:hover {
+            background-color: #a06cd5;
+        }
+        
+        a { color: #bb86fc; }
+        .back-link { display: block; text-align: center; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <h1>Talk to a Senior</h1>
+        
+        <div class="contact-container">
+            <h2>Here are three seniors you can reach out to:</h2>
+            <div id="seniorsContainer">
+                <p style="text-align: center;">Loading seniors...</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button id="refreshButton" class="refresh-btn">Get Different Seniors</button>
+            </div>
+        </div>
+
+        <div class="back-link">
+            <a href="index.html">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // This placeholder will be replaced by the build script with actual data
+        const allSeniorData = [{"email": "satchit@tamu.edu", "linkedin": ""}, {"email": "dhruv.khandelwal28@gmail.com or +91-8890010125", "linkedin": ""}, {"email": "alish.dipani@gmail.com", "linkedin": ""}, {"email": "akshayravula217@gmail.com", "linkedin": ""}, {"email": "siddharthp0200@gmail.com", "linkedin": ""}, {"email": "f20191089P@alumni.bits-pilani.ac.in", "linkedin": ""}, {"email": "pamitm@gmail.com", "linkedin": ""}, {"email": "pulkit.saraf332@gmail.com", "linkedin": ""}, {"email": "abhisheksuresan@gmail.com", "linkedin": ""}, {"email": "email - tanmaykakati30@gmail.com, tkakati@uw.edu; Phone - +12066365948; Linkedin - https://www.linkedin.com/in/tanmaykakati/", "linkedin": ""}, {"email": "Email(f20140632g@alumni.bits-pilani.ac.in)", "linkedin": ""}, {"email": "prakarsh.chauhan.007@gmail.com", "linkedin": ""}, {"email": "Whatsapp: +17347735098 / Email: pranav.pal.lekhi@gmail.com", "linkedin": ""}, {"email": "anwesh.bh@gmail.com", "linkedin": ""}, {"email": "shrehalb@gmail.com", "linkedin": ""}, {"email": "f20190670g@alumni.bits-pilani.ac.in", "linkedin": ""}, {"email": "LinkedIn Dm, shriya2197@gmail.com", "linkedin": ""}, {"email": "msmudit073@gmail.com", "linkedin": ""}, {"email": "sayanneogy98@gmail.com, 8583002109", "linkedin": ""}, {"email": "Email (srijanibiswas@gmail.com) or LinkedIn dm", "linkedin": ""}, {"email": "Either : kapilsachdeva8@gmail.com / +12365180656", "linkedin": ""}, {"email": "kabir.dhingra12321@gmail.com", "linkedin": ""}, {"email": "aman9ar9@gmail.com", "linkedin": ""}, {"email": "9814277165,akhilesh.sharma0145@gmail.com", "linkedin": ""}, {"email": "1vikramjeetdas@gmail.com or LinkedIn", "linkedin": ""}, {"email": "akashdangayach@gmail.com / +14159944596 (WhatsApp)", "linkedin": ""}, {"email": "+91-6364514666, raghuvanshi.garvit@gmail.com", "linkedin": ""}, {"email": "bhaargavsriraman@gmail.com", "linkedin": ""}, {"email": "Email, sheenajain11@gmail.com", "linkedin": ""}, {"email": "arul@berkeley.edu", "linkedin": ""}, {"email": "sanjanasekhar39@gmail.com or LinkedIn", "linkedin": ""}, {"email": "+91 9998073901 / dharmik16902@gmail.com", "linkedin": ""}, {"email": "9011150426(whatsapp) or irfhanhilaly@gmail.com (email)", "linkedin": ""}, {"email": "lakshmisavaram.gs@gmail.com", "linkedin": ""}, {"email": "WhatsApp @ 9811750169", "linkedin": ""}, {"email": "Email - abhinavgupta231911@gmial.com", "linkedin": ""}, {"email": "yashbhargava.bitsgoa@gmail.com", "linkedin": ""}, {"email": "sudhamshumh@gmail.com", "linkedin": ""}, {"email": "f20190900h@alumni.bits-pilani.ac.in", "linkedin": ""}, {"email": "912.garima@gmail.com", "linkedin": ""}, {"email": "chauhan.soumya25@gmail.com", "linkedin": ""}, {"email": "f20170831g@alumni.bits-pilani.ac.in", "linkedin": ""}, {"email": "teraBaap@gmail.com", "linkedin": ""}, {"email": "shahnawaz.ahmed95@gmail.com", "linkedin": ""}, {"email": "divyanshunigamias@gmail.com", "linkedin": ""}, {"email": "rohitbanerjee@g.ucla.edu", "linkedin": ""}, {"email": "f2011473g@alumni.bits-pilani.ac.in", "linkedin": ""}, {"email": "sakethkatikaneni@gmail.com", "linkedin": ""}, {"email": "akhilmohammed@gmail.com", "linkedin": ""}, {"email": "bhargavvader@gmail.com", "linkedin": ""}, {"email": "mathewmohan1995@gmail.com", "linkedin": ""}, {"email": "f20201688g@alumni.bits-pilani.ac.in", "linkedin": ""}, {"email": "sri.bhaswath@gmail.com", "linkedin": ""}, {"email": "ambareeshsrja16@gmail.com", "linkedin": ""}, {"email": "912.garima@gmail.com", "linkedin": ""}, {"email": "Vamsi.yerramilli@gmail.com", "linkedin": ""}, {"email": "sachinsuresh00@gmail.com", "linkedin": ""}, {"email": "f20190420g@alumni.bits-pilani.ac.in", "linkedin": ""}, {"email": "madhav.agrawal1995@gmail.com", "linkedin": ""}, {"email": "avsashisha8@gmail.com", "linkedin": ""}, {"email": "harshvardhanpe1@gmail.com", "linkedin": ""}, {"email": "f2013114g@alumni.bits-pilani.ac.in", "linkedin": ""}, {"email": "marknaman05@gmail.com", "linkedin": ""}, {"email": "prayag222002bits@gmail.com", "linkedin": ""}, {"email": "neerajingle95@gmail.com", "linkedin": ""}, {"email": "deekshaaggarwal13@gmail.com", "linkedin": ""}, {"email": "rishabhmchugh07@gmail.com", "linkedin": ""}, {"email": "akshayravula217@gmail.com", "linkedin": ""}, {"email": "padb19122000@gmail.com", "linkedin": ""}, {"email": "f1harshal@gmail.com", "linkedin": ""}, {"email": "ap21101995@gmail.com", "linkedin": ""}, {"email": "f20202052g@alumni.bits-pilani.ac.in", "linkedin": ""}, {"email": "f20201450g@alumni.bits-pilani.ac.in", "linkedin": ""}, {"email": "f20140909g@alumni.bits-pilani.ac.in", "linkedin": ""}, {"email": "rohangarg008@gmail.com", "linkedin": ""}, {"email": "atulmishra2794@gmail.com", "linkedin": ""}, {"email": "f2013012g@alumni.bits-pilani.ac.in", "linkedin": ""}, {"email": "f20160259h@alumni.bits-pilani.ac.in", "linkedin": ""}, {"email": "govi.upadhyay@gmail.com", "linkedin": ""}, {"email": "mrkrvr@gmail.com", "linkedin": ""}, {"email": "shubh.malhotra@gmail.com", "linkedin": ""}, {"email": "f20181014g@alumni.bits-pilani.ac.in", "linkedin": ""}, {"email": "f20190802g@alumni.bits-pilani.ac.in", "linkedin": ""}, {"email": "nsush09@gmail.com", "linkedin": ""}, {"email": "kunu68@gmail.com", "linkedin": ""}, {"email": "shashanktandon88@gmail.com", "linkedin": ""}, {"email": "shardool.rastogi@bitsaa.org", "linkedin": ""}];
+        const NUM_SENIORS_TO_SELECT = 3;
+        const seniorsContainer = document.getElementById('seniorsContainer');
+        const refreshButton = document.getElementById('refreshButton');
+        
+        // Function to select random seniors
+        function selectRandomSeniors() {
+            if (!Array.isArray(allSeniorData) || allSeniorData.length === 0) {
+                seniorsContainer.innerHTML = '<p style="text-align: center;">Sorry, no senior contact information is available.</p>';
+                refreshButton.disabled = true;
+                return;
+            }
+            
+            // Make a copy of the array to avoid modifying the original
+            const availableSeniors = [...allSeniorData];
+            const selectedSeniors = [];
+            const count = Math.min(NUM_SENIORS_TO_SELECT, availableSeniors.length);
+            
+            for (let i = 0; i < count; i++) {
+                if (availableSeniors.length === 0) break;
+                const randomIndex = Math.floor(Math.random() * availableSeniors.length);
+                selectedSeniors.push(availableSeniors.splice(randomIndex, 1)[0]);
+            }
+            
+            displaySeniors(selectedSeniors);
+        }
+        
+        // Function to display the selected seniors
+        function displaySeniors(seniors) {
+            if (!seniors || seniors.length === 0) {
+                seniorsContainer.innerHTML = '<p style="text-align: center;">Sorry, no senior contact information is available.</p>';
+                return;
+            }
+            
+            let html = '';
+            
+            seniors.forEach(senior => {
+                html += `<div class="senior-card">`;
+                html += `<span class="senior-email">${senior.email}</span>`;
+                
+                // Add LinkedIn if available
+                if (senior.linkedin) {
+                    html += `<a href="${senior.linkedin}" class="senior-linkedin" target="_blank">View LinkedIn Profile</a>`;
+                }
+                
+                html += `</div>`;
+            });
+            
+            seniorsContainer.innerHTML = html;
+        }
+        
+        // Initial selection on page load
+        selectRandomSeniors();
+        
+        // Add refresh functionality
+        refreshButton.addEventListener('click', selectRandomSeniors);
+    </script>
+</body>
+</html> 

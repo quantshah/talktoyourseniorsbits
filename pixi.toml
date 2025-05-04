@@ -1,0 +1,13 @@
+[workspace]
+authors = ["Mridul Seth <git@mriduls.com>"]
+channels = ["conda-forge"]
+name = "talktoyourseniorsbits"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+build = "python build_static.py"
+
+[dependencies]
+pandas = ">=2.2.3,<3"
+python = "3.12.*"

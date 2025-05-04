@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Talk to a Senior - BITS Mental Health</title>
+    <style>
+        body { 
+            margin: 0;
+            font-family: sans-serif;
+            background: url("static/images/background.png") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        h1 { text-align: center; color: #ffffff; margin-bottom: 20px; }
+        
+        .contact-container {
+            background-color: rgba(30, 30, 30, 0.8);
+            border: 1px solid #333;
+            border-radius: 8px; 
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        
+        h2 { 
+            font-size: 1.3em; 
+            color: #bb86fc; 
+            margin-top: 0; 
+            margin-bottom: 20px; 
+            text-align: center;
+        }
+        
+        p { margin: 0 0 10px 0; line-height: 1.5; }
+        
+        .senior-card {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        
+        .senior-card:last-child {
+            margin-bottom: 0;
+        }
+        
+        .senior-email {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            word-break: break-all;
+        }
+        
+        .senior-linkedin {
+            display: inline-block;
+            margin-top: 5px;
+            color: #bb86fc;
+            text-decoration: none;
+        }
+        
+        .senior-linkedin:hover {
+            text-decoration: underline;
+        }
+        
+        .refresh-btn {
+            padding: 10px 20px;
+            background-color: #bb86fc;
+            color: #121212;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .refresh-btn:hover {
+            background-color: #a06cd5;
+        }
+        
+        a { color: #bb86fc; }
+        .back-link { display: block; text-align: center; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <h1>Talk to a Senior</h1>
+        
+        <div class="contact-container">
+            <h2>Here are three seniors you can reach out to:</h2>
+            <div id="seniorsContainer">
+                <p style="text-align: center;">Loading seniors...</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button id="refreshButton" class="refresh-btn">Get Different Seniors</button>
+            </div>
+        </div>
+
+        <div class="back-link">
+            <a href="index.html">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // This placeholder will be replaced by the build script with actual data
+        const allSeniorData = {{ seniors_json }};
+        const NUM_SENIORS_TO_SELECT = 3;
+        const seniorsContainer = document.getElementById('seniorsContainer');
+        const refreshButton = document.getElementById('refreshButton');
+        
+        // Function to select random seniors
+        function selectRandomSeniors() {
+            if (!Array.isArray(allSeniorData) || allSeniorData.length === 0) {
+                seniorsContainer.innerHTML = '<p style="text-align: center;">Sorry, no senior contact information is available.</p>';
+                refreshButton.disabled = true;
+                return;
+            }
+            
+            // Make a copy of the array to avoid modifying the original
+            const availableSeniors = [...allSeniorData];
+            const selectedSeniors = [];
+            const count = Math.min(NUM_SENIORS_TO_SELECT, availableSeniors.length);
+            
+            for (let i = 0; i < count; i++) {
+                if (availableSeniors.length === 0) break;
+                const randomIndex = Math.floor(Math.random() * availableSeniors.length);
+                selectedSeniors.push(availableSeniors.splice(randomIndex, 1)[0]);
+            }
+            
+            displaySeniors(selectedSeniors);
+        }
+        
+        // Function to display the selected seniors
+        function displaySeniors(seniors) {
+            if (!seniors || seniors.length === 0) {
+                seniorsContainer.innerHTML = '<p style="text-align: center;">Sorry, no senior contact information is available.</p>';
+                return;
+            }
+            
+            let html = '';
+            
+            seniors.forEach(senior => {
+                html += `<div class="senior-card">`;
+                html += `<span class="senior-email">${senior.email}</span>`;
+                
+                // Add LinkedIn if available
+                if (senior.linkedin) {
+                    html += `<a href="${senior.linkedin}" class="senior-linkedin" target="_blank">View LinkedIn Profile</a>`;
+                }
+                
+                html += `</div>`;
+            });
+            
+            seniorsContainer.innerHTML = html;
+        }
+        
+        // Initial selection on page load
+        selectRandomSeniors();
+        
+        // Add refresh functionality
+        refreshButton.addEventListener('click', selectRandomSeniors);
+    </script>
+</body>
+</html> 

@@ -112,3 +112,7 @@ def talk_to_senior():
         )
 
     return render_template("talk_form.html")
+
+
+if __name__ == "__main__":
+    app.run()

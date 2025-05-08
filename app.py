@@ -11,7 +11,6 @@ app = Flask(__name__)
 # TODO: Make these environment variables instead of hardcoding
 GOOGLE_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1jVwCFKq-65EZOmSI12WVt1ol6RVTnFuLXCI5jObsnNs/export?format=csv&gid=1091959874"
 GOOGLE_SIGN_UP_FORM = "https://forms.gle/7zrNwL6mxYjmYfBeA"
-GOOGLE_TELL_YOUR_WORRIES_FORM = "https://forms.gle/nbqCJVJjaaQxChyN7"
 
 
 @app.route("/")
@@ -43,7 +42,6 @@ def index():
         testimonials=testimonials,
         sign_up_link=GOOGLE_SIGN_UP_FORM,
         talk_form_link=url_for("talk_to_senior"),
-        respond_form_link=GOOGLE_TELL_YOUR_WORRIES_FORM,
     )
 
 
